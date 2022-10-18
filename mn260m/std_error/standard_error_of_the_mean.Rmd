@@ -1,0 +1,221 @@
+---
+title: "Worked Example: Standard Error of the Mean"
+runningheader: "Standard Error of the Mean" # only for pdf output
+subtitle: "An implementation in R Markdown" # only for html output
+author: "Lombardi"
+date: "`r Sys.Date()`"
+output:
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_html: default
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+bibliography: skeleton.bib
+link-citations: yes
+---
+
+```{r setup, include=FALSE}
+library(tufte)
+# invalidate cache when the tufte version changes
+knitr::opts_chunk$set(cache.extra = packageVersion('tufte'))
+options(htmltools.dir.version = FALSE)
+```
+
+# Standard Error of the Mean
+
+```{r fig-margin1, fig.margin = TRUE, fig.cap = "Normal Distribution with mean, 100, standard deviation, 10.", fig.width=3.5, fig.height=3.5, cache=TRUE, message=FALSE, echo=FALSE}
+#define population mean and standard deviation
+population_mean <- 100
+population_sd <- 10
+
+#define upper and lower bound
+lower_bound <- population_mean - population_sd
+upper_bound <- population_mean + population_sd
+
+#Create a sequence of 1000 x values based on population mean and standard deviation
+x <- seq(-4, 4, length = 1000) * population_sd + population_mean
+
+#create a vector of values that shows the height of the probability distribution
+#for each value in x
+y <- dnorm(x, population_mean, population_sd)
+
+#plot normal distribution with customized x-axis labels
+plot(x,y, type = "l", lwd = 2, axes = FALSE, xlab = "", ylab = "")
+sd_axis_bounds = 5
+axis_bounds <- seq(-sd_axis_bounds * population_sd + population_mean,
+                    sd_axis_bounds * population_sd + population_mean,
+                    by = population_sd)
+axis(side = 1, at = axis_bounds, pos = 0)
+abline(v=population_mean, col="blue")
+abline(v=population_mean+population_sd, col="gray")
+abline(v=population_mean-population_sd, col="gray")
+```
+
+In many cases, we cannot collect data related to every entity in a population.
+Practical constraints like effort and cost often require us to sample the 
+population to obtain an estimate of the measurement we seek.\
+When estimating values like the population mean, we often need a sense of 
+the precision of our estimates. As it turns out, if we repeatedly
+sample our population, the sample means will 
+cluster around the population mean. The standard error of the mean, 
+$\sigma_{\bar x}$, measures the dispersion of the the sample means.\
+\
+```{marginfigure}
+We compute a *sample statistic* to estimate the value of a *population
+parameter*. For example, the sample mean $\bar{x}$ is the
+point estimator of the population mean, $\mu$. In other words, $\bar{x}$ 
+provides an estimate of $\mu$.
+```
+\
+The *central limit theorem* helps us understand how the sample means are
+distributed around the population mean.\  
+\
+```{marginfigure}
+**Central Limit Theorem**: 
+In selecting random samples of size n from a population, the sampling distribution of
+$\bar{x}$ can be approximated by a *normal distribution* as the sample size becomes large.
+```
+\
+This worked example outlines two different techniques for calculating the 
+standard error of the mean. 
+
+# Standard Error of the Mean (Infinite Population)
+
+**Problem:** Suppose a random sample of size 50 (n=50) is selected from a 
+population with 
+$\sigma = 10$. Find the value of $\sigma_{\bar x}$ assuming that the 
+population size is infinite.\
+\
+*Step 1:* Formula 1 provides the standard error of the mean, 
+$\sigma_{\bar x}$. Apply the forumula to our problem's specific values.\  
+\
+```{marginfigure}
+\Large
+\begin{equation} 
+    \sigma_{\bar x} = \frac{\sigma}{\sqrt{n}}
+\end{equation}
+Use this formula whenever the population is infinite or the sample size
+is less than or equal to 5% of the population size.
+```  
+\
+After substituting the values, the formula should look like:\
+\
+$\sigma_{\bar x} = \frac{10}{\sqrt{50}}$\
+\
+*Step 2:* Perform the calculation\
+\
+$\sigma_{\bar{x}}$ = `r 10/sqrt(50)`  
+
+# Standard Error of the Mean (Finite Population)
+
+**Problem:** Suppose a random sample of size 50 (n=50) is selected from a 
+population with 
+$\sigma = 10$. Find the value of $\sigma_{\bar x}$ assuming that the 
+population size (N=500).\
+\
+*Step 1:* Formula 2 provides the standard error of the mean $\sigma_{\bar x}$
+with finite population correction factor. 
+Apply the forumula to our problem's specific values.\  
+\
+```{marginfigure}
+\Large
+\begin{equation} 
+    \sigma_{\bar x} = \sqrt{\frac{N-n}{N-1}} \left( \frac{\sigma}{\sqrt{n}} \right)
+\end{equation}
+Use this formula whenever the population is finite and the sample size
+is greater than 5% of the population size.
+```  
+\
+After substituting the values, the formula should look like:\
+\
+$\sigma_{\bar x} = \sqrt{\frac{500-50}{500-1}} \left( \frac{10}{\sqrt{50}} \right)$\
+\
+*Step 2:* Perform the calculation\
+\
+$\sigma_{\bar{x}}$ = `r sqrt((500-50)/(500-1))*(10/sqrt(50))`  
+
+# Sampling Distribution
+
+The **sampling distribution of $\bar{x}$** is the probability distribution of 
+all possible values of the sample mean $\bar{x}$.
+
+```{r fig-margin2, fig.margin = TRUE, fig.cap = "Sampling Distribution", fig.width=3.5, fig.height=3.5, cache=TRUE, message=FALSE, echo=FALSE}
+#make this example reproducible
+set.seed(0)
+
+#define number of samples
+n = 10000
+
+#create empty vector of length n
+sample_means = rep(NA, n)
+
+#fill empty vector with means
+for(i in 1:n){
+  sample_means[i] = mean(rnorm(n=10, mean=100, sd=10))
+}
+
+#create histogram to visualize the sampling distribution
+hist(sample_means, main = "", xlab = "Sample Means (n=10)", col = "steelblue")
+```
+
+The central limit theorem suggests that a large, properly 
+drawn sample will resemble the population from which it is drawn
+(Wheelan, 2013). The sampling distribution of sample means from repeatedly 
+drawn samples will cluster around the population mean even if the distribution
+of the population is skewed. In other words, the distribution of sample 
+means is normal.\
+Consider Figures 2, 3, and 4.\ Figure 2 shows the sampling distributon 
+for 10000 independently drawn samples of
+n=10 for $\mu = 100$ and $\sigma = 10$ from a normal distribution.\
+$\bar{x}=$ `r mean(sample_means)` -  $\sigma_{\bar{x}}=$ `r 10/sqrt(10)`\
+
+```{r fig-margin3, fig.margin = TRUE, fig.cap = "Sampling Distribution", fig.width=3.5, fig.height=3.5, cache=TRUE, message=FALSE, echo=FALSE}
+#make this example reproducible
+set.seed(0)
+
+#define number of samples
+n = 10000
+
+#create empty vector of length n
+sample_means = rep(NA, n)
+
+#fill empty vector with means
+for(i in 1:n){
+  sample_means[i] = mean(rnorm(n=50, mean=100, sd=10))
+}
+
+#create histogram to visualize the sampling distribution
+hist(sample_means, main = "", xlab = "Sample Means (n=50)", col = "steelblue")
+```
+
+Figure 3 shows the sampling distribution for 10000 independently drawn samples
+of n=50 for $\mu = 100$ and $\sigma = 10$ from a normal distribution.\
+$\bar{x}=$ `r mean(sample_means)` -  $\sigma_{\bar{x}}=$ `r 10/sqrt(50)`\
+
+```{r fig-margin4, fig.margin = TRUE, fig.cap = "Sampling Distribution", fig.width=3.5, fig.height=3.5, cache=TRUE, message=FALSE, echo=FALSE}
+#make this example reproducible
+set.seed(0)
+
+#define number of samples
+n = 10000
+
+#create empty vector of length n
+sample_means = rep(NA, n)
+
+#fill empty vector with means
+for(i in 1:n){
+  sample_means[i] = mean(rnorm(n=150, mean=100, sd=10))
+}
+
+#create histogram to visualize the sampling distribution
+hist(sample_means, main = "", xlab = "Sample Means (n=150)", col = "steelblue")
+```
+
+Figure 4 shows the sampling distribution for 10000 independently drawn samples
+of n=150 for $\mu = 100$ and $\sigma = 10$ from a normal distribution.\
+$\bar{x}=$ `r mean(sample_means)`  -  $\sigma_{\bar{x}}=$ `r 10/sqrt(150)`\
+As the sample size (n) increases, the sample means group more closely to the
+their expected value, the population mean.
+
