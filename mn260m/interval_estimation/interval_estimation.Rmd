@@ -18,6 +18,7 @@ link-citations: yes
 
 ```{r setup, include=FALSE}
 library(tufte)
+library(ggplot2)
 # invalidate cache when the tufte version changes
 knitr::opts_chunk$set(cache.extra = packageVersion('tufte'))
 options(htmltools.dir.version = FALSE)
@@ -25,20 +26,21 @@ options(htmltools.dir.version = FALSE)
 
 # Interval Estimation
 
+```{marginfigure}
+The general form of an interval estimate is: **point estimate $\pm$ margin of error**
+```
+
 In **point estimation** a sample statistic is used to estimate a population
 parameter. For example, the sample mean $\bar{x}$ is a point estimator of
 the population mean $\mu$. Since a point estimator does not provide an 
 exact value of the population parameter, an **interval estimate** is computed
 by adding and subtracting a value, called the **margin of error**, to the point
-estimate. 
+estimate. The purpose of an interval estimate is to provide information about how close the point estimate, provided by the sample, is to the value of the population
+parameter. 
 
 ```{marginfigure}
-The general form of an interval estimate is: **point estimate $\pm$ margin of error**
+The general form of an interval estimate of a population mean $\mu$ is: $\bar{x}$ $\pm$ margin of error
 ```
-
-The purpose of an interval estimate is to provide information about how close
-the point estimate, provided by the sample, is to the value of the population
-parameter. The general form of an interval estimate of a population mean $\mu$ is: $\bar{x}$ $\pm$ margin of error
 
 # Interval Estimate for Population Mean: $\sigma$ Known
 
@@ -54,34 +56,32 @@ calculate the interval estimate for the population mean where (1 - $\alpha$) is 
 ```  
 \
 **PROBLEM:** Given a sample mean $\bar{x}$ = 82, a population standard deviation 
-$\sigma$ = 20, and a sample size n = 100, construct a 95% confidence interval.  
-
+$\sigma$ = 20, and a sample size n = 100, construct a 95% confidence interval.
 \
-*Step 1*: Find $\alpha$
+*Step 1*: Find $\alpha$  
 
-For a 95% confidence interval, the **confidence coefficient** is   
+For a 95% confidence interval, the confidence coefficient is   
 (1 - $\alpha$) = 0.95.
 Therefore, $\alpha$ = 0.05.\
 \
-*Step 2*: Find the z-score associated with $\alpha$/2
+*Step 2*: Find the z-score associated with $\alpha$/2  
 
 Using the standard normal probability table, an area of $\alpha$/2 = 0.05/2 = 0.025
-in the upper tail provides $z_.025$. = 1.96.\
+in the upper tail provides $z_{.025}$. = 1.96.\
 \
-*Step 3*: Substitute the values in the formula.
+*Step 3*: Substitute the values in the formula.  
 
 $82 \pm 1.96 \frac{20}{\sqrt{100}}$\
 \
-*Step 4*: Calculate the margin of error
+*Step 4*: Calculate the margin of error  
 
 $82 \pm 3.92$\
-
-*Step 5*: Construct the confidence interval
+\
+*Step 5*: Construct the confidence interval  
 
 Construct the 95% confidence interval of the population mean by subtracting the interval estimate from the 
 sample mean $82-3.92$ = 78.08 and then by adding the interval estimate to 
 the sample mean $82+3.92$ = 85.92.
-
 
 # Interval Estimate for Population Mean: $\sigma$ Unknown
 
@@ -99,8 +99,8 @@ is the sample size.
 ```
 
 To compute an interval estimate of $\mu$ for the $\sigma$ unknown case , the
-sample standard deviation s is used to estimate $\sigma$ , and $z_.025$ is 
-replaced by the t distribution value $t_.025$. Formula 2 is the general 
+sample standard deviation s is used to estimate $\sigma$ , and $z_{.025}$ is 
+replaced by the t distribution value $t_{.025}$. Formula 2 is the general 
 expression for an interval estimate of a population mean when $\sigma$ is
 unknown where s is the sample standard deviation, (1-$\alpha$) is the confidence
 coefficient, and $t_{\frac{\alpha}{2}}$ is the t value providing the area of 
@@ -117,37 +117,45 @@ $\alpha$/2 in the upper tail of the t distribution with n-1 degrees of freedom.
 **PROBLEM:** Given a sample mean $\bar{x}$ = 9312, sample standard deviation
 s = 4007, and sample size n=70, construct a 95% confidence interval.
 \
-*Step 1*: Find $\alpha$
+*Step 1*: Find $\alpha$  
 
-For a 95% confidence interval, the **confidence coefficient** is   
-(1 - $\alpha$) = 0.95.
-Therefore, $\alpha$ = 0.05.\
+For a 95% confidence interval, the confidence coefficient is   
+(1 - $\alpha$) = 0.95. Therefore, $\alpha$ = 0.05.\
 \
-*Step 2*: Find the t value associated with $\alpha$/2
+*Step 2*: Find the t value associated with $\alpha$/2  
 
 In this case, degrees of freedom = 69 because our sample size n = 70 (70-1). 
 The t distribution table provides the appropriate value for $t_{\frac{\alpha}{2}}$.
-
 The t value 1.995 is located at the intersection of row 69 (degrees of freedom) and 
-column .025, the area for the upper tail.
+column .025, the area for the upper tail.\
 \
-*Step 3*: Substitute the values in the formula
+```{r fig-margin1, fig.margin = TRUE, fig.cap = "t distribution, df=69", fig.width=3.5, fig.height=3.5, cache=TRUE, message=FALSE, echo=FALSE}
+#curve(dt(x, 69), from = -4, to = 4)
+#x <- seq(-1.995, 1.995, len = 100)
+#y <- dt(x, 69)
+#polygon(c(x[1], x, x[100]), c(dt(-4, 69), y, dt(4, 69)),
+#     col = "red", border = NA)
+ggplot(data.frame(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dt, args =list(df =69)) +
+  stat_function(fun = dt,   args =list(df =69),
+                xlim = c(1.995,4),
+                geom = "area")
+```
+
+*Step 3*: Substitute the values in the formula  
 
 Starting from the equation,
-
 $\bar{x} \pm t_{\frac{\alpha}{2}} \frac{s}{\sqrt{n}}$
-
 the formula after the substitutions is:
-
-$9312 \pm 1.995 \frac{4007}{\sqrt{70}}$
+$9312 \pm 1.995 \frac{4007}{\sqrt{70}}$\
 \
-*Step 4*: Calculate the margin of error
+*Step 4*: Calculate the margin of error  
 
-$9312 \pm 955$
+$9312 \pm 955$\
 \
-*Step 5*: Construct the confidence interval
+*Step 5*: Construct the confidence interval  
 
 Construct the 95% confidence interval of the population mean by subtracting the interval estimate from the 
 sample mean $9312-955$ = 8357 and then by adding the interval estimate to 
-the sample mean $9312+955$ = 10,267.
+the sample mean $9312+955$ = 10267.
 
