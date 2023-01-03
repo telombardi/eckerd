@@ -216,6 +216,6 @@ hist(sample_means, main = "", xlab = "Sample Means (n=150)", col = "steelblue")
 Figure 4 shows the sampling distribution for 10000 independently drawn samples
 of n=150 for $\mu = 100$ and $\sigma = 10$ from a normal distribution.\
 $\bar{x}=$ `r mean(sample_means)`  -  $\sigma_{\bar{x}}=$ `r 10/sqrt(150)`\
-As the sample size (n) increases, the sample means group more closely to the
+As the sample size (n) increases, the sample means group more closely to
 their expected value, the population mean.
 
