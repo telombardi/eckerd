@@ -21,7 +21,7 @@ knitr::opts_chunk$set(cache.extra = packageVersion('tufte'))
 options(htmltools.dir.version = FALSE)
 ```
 
-We see data every day, and yet we often lack the language to 
+We see **data** every day, and yet we often lack the language to 
 describe, the concepts to understand, and the tools to interpret those data.
 This course aims to provide you with the language, concepts, and tools you 
 need to comprehend data and harness their power.
@@ -33,8 +33,28 @@ and interpretation.
 ```
 
 # Basic Vocabulary
-
 ![Basic Vocabulary](data_vocabulary.jpg)
+
+```{marginfigure}
+**Element**: 
+The entity on which data are collected. 
+```
+
+```{marginfigure}
+**Variable**: 
+A characteristic of interest for an element. 
+```
+
+```{marginfigure}
+**Observation**: 
+The set of measurements collected for a particular element. 
+```
+
+```{marginfigure}
+**Data Set**: 
+All collected data for a particular study. 
+```
+
 In Figure 1, we see the common vocabulary related to data in action.
 **Elements** are the entities on which data are collected. In Figure 1, 
 the element is the company, represented by its name. **Variables** are
@@ -46,20 +66,34 @@ Observation contains the set of measurements (variables) related to the element,
 EnergySouth. Finally, **data set** refers to all the data collected for the
 particular study. In this case, the data set comprises 5 observations
 measuring 3 variables for each element.
-\
 
-# Scales of Measurement/Data Types
+# Data Types and Scale of Measurement
+
+There are different kinds of numbers.
 
 The **scale of measurement** determines the amount of information contained in 
 the data and indicates the most appropriate data summarization and 
 statistical analyses.
 
+```{r, fig.fullwidth=TRUE, echo=FALSE}
+df <- data.frame(c("Nominal","Ordinal","Interval","Ratio"),
+                 c("Y","Y","Y","Y"),
+                 c("N","Y","Y","Y"),
+                 c("N","N","Y","Y"),
+                 c("N","N","N","Y"),
+                 c("Gender","Rankings","Temperature","Ratio"))
 
-Scale of    Named    |Ordered  |Proportionate|Absolute|Examples               |
-Measurement Variables|Variables|Interval     |Zero    |                       |
------------ -----------------|-------------|--------|-----------------------|
-Nominal       Y         N    |     N       |   N    |Gender                 |
------------------------------|-------------|--------|-----------------------|
+names(df) <- c("Scale","Named","Ordered",
+                "Proportionate Intervals", "Absolute Zero", "Examples")
+
+knitr::kable(
+  df, caption = 'Scales of Measurement'
+)
+```
+
+
+
+
 
 
 ```{marginfigure}
