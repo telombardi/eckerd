@@ -16,28 +16,113 @@ link-citations: yes
 
 ```{r setup, include=FALSE}
 library(tufte)
+library('plyr')
+library(epiDisplay)
 # invalidate cache when the tufte version changes
 knitr::opts_chunk$set(cache.extra = packageVersion('tufte'))
 options(htmltools.dir.version = FALSE)
 ```
 
-We see **data** every day, and yet we often lack the language to 
-describe, the concepts to understand, and the tools to interpret those data.
-This course aims to provide you with the language, concepts, and tools you 
-need to comprehend data and harness their power.
+Statistical work begins with accurately counting. **Frequency distributions**
+and **histograms** are common and effective ways to summarize the basic data we
+collect.
+
+# Frequency Distributions
 
 ```{marginfigure}
-**Data**: 
-The facts and figures collected, analyzed, and summarized for presentation
-and interpretation. 
+**Frequency Distribution**: 
+A frequency distribution is a tabular summary of data showing the number 
+(frequency) of observations in each of several nonoverlapping categories or
+classes. 
 ```
 
-# Basic Vocabulary
+Frequency distributions are useful for summarizing categorical and quantitative
+data. Consider the following example related to categorical data. In this 
+example, we collected data on 20 soda purchases.
+
+```{r, echo=FALSE, fig.fullwidth=TRUE}
+soda <- c("Coke","Pepsi","Sprite","Fanta","Dr. Pepper",
+          "Coke","Pepsi","Coke","Pepsi","Fanta",
+          "Coke","Coke","Coke","Pepsi","Dr. Pepper",
+          "Coke","Pepsi", "Coke", "Fanta", "Coke")
+print(soda)
+print(count(soda))
+```
 
 ```{marginfigure}
-**Element**: 
-The entity on which data are collected. 
+**Relative Frequency**: 
+\Large
+\begin{equation} 
+    \frac{frequency}{n}
+\end{equation}
+where frequency is the class frequency and n is the number of observations 
+in the sample data set.
 ```
+
+When we count the number of times people purchased each type of soda, we 
+arrive at the frequency distribution displayed above. Figure 1 demonstrates
+how we can present this data graphically with a bar chart. In some cases, we
+want to see the **relative frequency** of each class. We can display the 
+data as a relative frequency distribution as well. The relative frequency
+of a class is the frequency of the class divided by the number of observations
+in the data set. For example, the relative frequency of Coke is 0.45 or 
+9 divided by 20 (n). 
+
+```{r, echo=FALSE, fig.fullwidth=TRUE}
+rf <- table(soda)/length(soda)
+print(count(rf))
+#tab1(soda, sort.group = "decreasing", cum.percent = TRUE)
+```
+
+```{r, echo=FALSE, fig.margin=TRUE, fig.fullwidth=FALSE, fig.cap="Bar Chart", fig.height=5}
+barplot(table(soda),width=c(5,5,5,5,5), cex.names=.5, ylim=c(0,10))
+usr <- par("usr")
+par(usr=c(usr[1:2], 0, 10))
+axis(2,at=seq(0,10,1))
+
+```
+
+Frequency distributions can also be used for quantitative variables. In these
+cases, we must be a bit more thoughtful about how we construct the overlapping
+classes. In particular, we must pay close attention to:
+
+1. The number of nonoverlapping classes we want;
+2. The width of each class;
+3. The class limits.
+
+In the following example, we collected 20 student exam grades.
+
+```{r, echo=FALSE, fig.fullwidth=TRUE}
+grades <- c(80,85,75,81,90,
+            70,79,84,74,80,
+            95,75,83,88,78,
+            55,65,98,73,89)
+
+br = seq(49,99,by=10)
+
+ranges = paste(head(br,-1)+1, br[-1], sep=" - ")
+freq   = hist(grades, breaks=br, include.lowest=TRUE, plot=FALSE)
+
+df <- data.frame(range = ranges, frequency = freq$counts)
+
+df[,3] <- df[,2]/length(grades)
+
+names(df) <- c("Class", "Frequency", "Relative Frequency")
+
+print(grades)
+print(df)
+```
+
+
+Tab 1 | Tab 2 | Tab 3
+------|-------|-------
+1     | seven | five
+3     | two   | four
+
+
+
+
+
 
 ```{marginfigure}
 **Variable**: 
