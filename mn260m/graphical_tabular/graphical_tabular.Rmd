@@ -63,15 +63,14 @@ When we count the number of times people purchased each type of soda, we
 arrive at the frequency distribution displayed above. Figure 1 demonstrates
 how we can present this data graphically with a bar chart. In some cases, we
 want to see the **relative frequency** of each class. We can display the 
-data as a relative frequency distribution as well. The relative frequency
+data as a **relative frequency distribution** as well. The relative frequency
 of a class is the frequency of the class divided by the number of observations
 in the data set. For example, the relative frequency of Coke is 0.45 or 
 9 divided by 20 (n). 
 
 ```{r, echo=FALSE, fig.fullwidth=TRUE}
 rf <- table(soda)/length(soda)
-print(count(rf))
-#tab1(soda, sort.group = "decreasing", cum.percent = TRUE)
+print(count(rf)[,1:2])
 ```
 
 ```{r, echo=FALSE, fig.margin=TRUE, fig.fullwidth=FALSE, fig.cap="Bar Chart", fig.height=5}
@@ -79,7 +78,6 @@ barplot(table(soda),width=c(5,5,5,5,5), cex.names=.5, ylim=c(0,10))
 usr <- par("usr")
 par(usr=c(usr[1:2], 0, 10))
 axis(2,at=seq(0,10,1))
-
 ```
 
 Frequency distributions can also be used for quantitative variables. In these
@@ -98,6 +96,17 @@ grades <- c(80,85,75,81,90,
             95,75,83,88,78,
             55,65,98,73,89)
 
+print(grades)
+```
+
+In order to make a meaningful frequency distribution, we need to select the 
+number of classes that we want. Five classes of width 10 makes good sense
+since we are grouping exam grades. The table below shows the class boundaries
+which coincide with the familiar grade breakdowns from A to F. The table
+includes the frequency distribution and the relative frequency distribution as
+in our previous example. 
+
+```{r, echo=FALSE, fig.fullwidth=TRUE}
 br = seq(49,99,by=10)
 
 ranges = paste(head(br,-1)+1, br[-1], sep=" - ")
@@ -107,128 +116,24 @@ df <- data.frame(range = ranges, frequency = freq$counts)
 
 df[,3] <- df[,2]/length(grades)
 
-names(df) <- c("Class", "Frequency", "Relative Frequency")
+df[,4] <- cumsum(df[,2])
 
-print(grades)
+df[,5] <- df[,4]/length(grades)
+
+names(df) <- c("Class", "Frequency", "Relative Freq.", "Cumulative Freq.", "Cum. Relative Freq.")
+
 print(df)
 ```
 
+The table also includes two new variations. The 
+**cumulative frequency distribution** shows the number of data items with
+less than or equal to the upper class limit of each class. 
+The **cumulative relative frequency distribution** shows the proportion of the
+data items with values less than or equal to the upper limit of each class.
+Figure 2 demonstrates how we can visualize the frequency distribution of a quantitative 
+variable with a **histogram**.
 
-Tab 1 | Tab 2 | Tab 3
-------|-------|-------
-1     | seven | five
-3     | two   | four
-
-
-
-
-
-
-```{marginfigure}
-**Variable**: 
-A characteristic of interest for an element. 
+```{r, echo=FALSE, fig.margin=TRUE, fig.fullwidth=FALSE, fig.cap="Histogram", fig.height=5}
+hist(grades,breaks=br)
 ```
-
-```{marginfigure}
-**Observation**: 
-The set of measurements collected for a particular element. 
-```
-
-```{marginfigure}
-**Data Set**: 
-All collected data for a particular study. 
-```
-
-In Figure 1, we see the common vocabulary related to data in action.
-**Elements** are the entities on which data are collected. In Figure 1, 
-the element is the company, represented by its name. **Variables** are
-characteristics of interest for the elements. For example, for each
-element (company), variables for Stock Exchange, Annual Sales, and
-Earnings per share were collected. An **observation** is the set of 
-measurements collected for a particular element. In this case, the row marked
-Observation contains the set of measurements (variables) related to the element,
-EnergySouth. Finally, **data set** refers to all the data collected for the
-particular study. In this case, the data set comprises 5 observations
-measuring 3 variables for each element.
-
-# Types of Data and Scale of Measurement
-
-```{marginfigure}
-**Categorical Data**: 
-Labels or names used to identify an attribute of each element. 
-```
-
-```{marginfigure}
-**Quantitative Data**: 
-Numeric values that indicate how much or how many of something of interest. 
-```
-
-Variables use different kinds of numbers to identify or measure attributes.
-Consider two different types of numbers related to athletes. In many sports,
-athletes wear jerseys to identify them from other players on the field. Jersey
-numbers are labels that identify particular players. Compare a jersey number
-to an athlete's performance statistics or height measurements. Where the 
-jersey number is a label, an athlete's height is a proper quantitative 
-measurement. Variables such as jersey number are referred to as 
-**categorical variables** ; those like height are referred to 
-as **quantitative variables**.
-
-
-While the distinction between categorical and quantitative variables is 
-useful, data analysts and statisticians often require more precision
-when considering how to responsibly use variables.
-The **scale of measurement** determines the amount of information contained in 
-the data and indicates the most appropriate data aggregation and 
-statistical analyses. Table 1 summarizes the scales of measurement, their 
-properties, and examples.
-
-```{marginfigure}
-**Nominal Scale**: 
-The scale of measurement for a variable when the data are labels or names
-used to identify an attribute of an element. 
-```
-
-```{marginfigure}
-**Ordinal Scale**: 
-The scale of measurement for a variable if the data exhibit the properties
-of nominal data and the order or rank of the data is meaningful. 
-```
-
-```{marginfigure}
-**Interval Scale**: 
-The scale of measurement for a variable if the data demonstrate the properties
-of ordinal data and the interval between values is expressed in terms of a
-fixed unit of measure. 
-```
-
-```{marginfigure}
-**Ratio Scale**: 
-The scale of measurement for a variable if the data demonstrate all the 
-properties of interval data and the ratio of two values is meaningful. 
-```
-
-```{r, fig.fullwidth=TRUE, echo=FALSE}
-df <- data.frame(c("Nominal","Ordinal","Interval","Ratio"),
-                 c("Y","Y","Y","Y"),
-                 c("N","Y","Y","Y"),
-                 c("N","N","Y","Y"),
-                 c("N","N","N","Y"),
-                 c("Gender","Rankings","Temperature","Ratio"))
-
-names(df) <- c("Scale","Named","Ordered",
-                "Proportionate Intervals", "Absolute Zero", "Examples")
-
-knitr::kable(
-  df, caption = 'Scales of Measurement'
-)
-```
-
-Figure 2 summarizes the types of data and scales of measurement in a taxonomy.
-The purpose of thinking through the scales of measurement of variables is 
-to ensure that apply sound techniques to data with those properties. Consider
-the example of athletes again. While taking the average height of basketball or 
-volleyball players makes sense, taking an average of the jersey numbers of 
-those players makes no sense at all.
-
-
 
