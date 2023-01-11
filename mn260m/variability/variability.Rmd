@@ -1,7 +1,7 @@
 ---
-title: "Measures of Location"
-runningheader: "Measures of Location" # only for pdf output
-subtitle: "Measuring Central Tendancy" # only for html output
+title: "Measures of Variability"
+runningheader: "Measures of Variability" # only for pdf output
+subtitle: "Measuring Dispersion" # only for html output
 output:
   tufte::tufte_handout:
     citation_package: natbib
@@ -23,98 +23,111 @@ knitr::opts_chunk$set(cache.extra = packageVersion('tufte'))
 options(htmltools.dir.version = FALSE)
 ```
 
-```{marginfigure}
-**Sample Statistic**: 
-A numerical value used as a summary measure for a sample such as the sample
-mean, $\bar{x}$. 
-```
+In previous discussions, we introduced the concept of measures of location. They
+help us understand the typical values in a distribution. While measures of 
+location are certainly helpful, they are even more so when paired with a 
+measure of variability.
+
+# Variance
 
 ```{marginfigure}
-**Population Parameter**: 
-A numerical value used as a summary measure for a population such as the 
-population mean, $\mu$. 
-```
-
-In previous discussions, we introduced the difference between and population
-and a sample. This distinction matters as we start our discussion of 
-measures of location or measures of central tendency. Measures based 
-on samples are called **sample statistics**, Measures based on a population
-are called **population parameters**. 
-
-# Arithmetic Mean
-
-```{marginfigure}
-**Sample Mean**: 
+**Sample Variance**: 
 \Large
 \begin{equation} 
-    \bar{x} = \frac{\Sigma x_i}{n}
+    s^2 = \frac{\Sigma (x_i - \bar{x})^2}{n-1}
 \end{equation}
-where $\Sigma$ means the sum of, $x_i$ is the value of x for the ith observation
-and $n$ is the number of observations in the sample data set.
+where $\Sigma$ means the sum of, $x_i$ is the value of x for the ith observation,
+$\bar{x}$ is the sample mean, and $n$ is the number of observations in the sample data set.
 ```
 
-Measures of location attempt to capture the most typical values found in a 
-variable. The most important measure of location is the **arithmetic mean**, or 
-the average value, of a variable. The mean is computed by summing the data 
-values and dividing by the number of observations. 
-Let's walk through the components of the equation for the sample mean.\
+The variance is based on the difference between the value of each observation
+$x_i$ and the mean. The difference between each $x_i$ and the mean is called
+a **deviation about the mean**. These deviations about the mean are squared 
+in the calculation of the variance. The term $\Sigma (x_i - \bar{x})^2$  is 
+often referred to as the **sum of squares** or **sum of squared deviations**.
+Before walking through an example, let's
+compare the equations for sample variance and population variance. \
+
+There are three major differences between these two equations:
+1. $s^2$ denotes the sample variance; $\sigma^2$ denotes the population variance.
+2. The sample variance relies on the sample mean ($\bar{x}$), while the 
+population variance uses the population mean ($\mu$).
+3. The sample variance divides the sum of squared deviations by n-1, while the the
+population variance divides the sum of squares by n. 
 
 ```{marginfigure}
-**Population Mean**: 
-\Large
-\begin{equation} 
-    \mu = \frac{\Sigma x_i}{N}
-\end{equation}
-where $\Sigma$ means the sum of, $x_i$ is the value of x for the ith observation
-and $N$ is the number of observations in the population data set.
+**Point Estimator**:
+A sample statistic, such $\bar{x}$, $s^2$, and $s$, used to estimate the 
+corresponding population parameter.
 ```
 
+In order to understand these differences, we need to review the difference
+between samples and populations, and sample statistics and a population parameters.
+Often, we want to know the population parameter, but we cannot directly measure it
+due to cost, ethical or practical considerations. Statistical inference gives us
+a way to infer population parameters from the statistics of well-chosen samples.
+**Point estimation** is the process of using a sample statistic like the 
+sample mean ($\bar{x}$), sample variance ($s^2$), or sample standard deviation
+($s$) to estimate the corresponding population parameter. For example, we use
+the sample mean, $\bar{x}$, in the sample variance formula because we very 
+likely do not know or cannot know the population mean, $\mu$. Also, we divide
+the sum of squared deviations by n-1, rather than N, because this produces an
+unbiased (better) estimation of the population variance. In short, the 
+sample variance estimates the population variance and where the sample formula
+departs from its population equivalent, it does so to improve its estimation.
+
+```{marginfigure}
+**Population Variance**: 
+\Large
+\begin{equation} 
+    \sigma^2 = \frac{\Sigma (x_i - \mu)^2}{N}
+\end{equation}
+where $\Sigma$ means the sum of, $x_i$ is the value of x for the ith observation,
+$\mu$ is the population mean, and $N$ is the number of observations in the population data set.
+```
+
+Let's walk through the sample variance formula.\
 \
-**$\bar{x}$**, pronounced *x bar*, is the symbol for the sample mean.\
+**$s^2$** is the symbol for sample variance.
+
+**$\Sigma (x_i - \bar{x})^2$** represents the sum of squared deviations (sum of squares).\
 \
-**$\Sigma$** means sum the values. So $\Sigma x_i$ means sum the values 
-from $x_i$ to $x_n$. $i$ is referred to as an index.\
+**$n-1$** is the size of the sample less one.\
 \
-**$n$** is the size of the sample or the number of observations in the sample.\
-\
-Let's calculate the arithmetic mean for the following sample:\
+Let's calculate the arithmetic mean for the following sample.\
 \
 **46, 54, 42, 46, 32**\
-\
-In this example, $x_1$=46, $x_2$=54, $x_3$=42, $x_4$=46, and $x_5$=32. For
-the sake of simplicity, we often lay out our calculations as follows.
 
-## Step 1: Calculate the sum of the values
+## Step 1: Calculate the sum of squared deviations
 
-$_i$|$x_i$
--|-----
-1| 46
-2| 54
-3| 42
-4| 46
-5| 32
--|-----
-$\Sigma$|`r sum(46,54,42,46,32)`
+Recall that the sample mean ($\bar{x}$) of these data is 44. 
+
+$_i$|$x_i$|$\bar{x}$|$(x_i - \bar{x})$  |$(x_i - \bar{x})^2$
+--|-------|---------|-------------------|---------------------
+1 | 46    |    44   |       2           |       4
+2 | 54    |    44   |      10           |     100
+3 | 42    |    44   |      -2           |       4
+4 | 46    |    44   |       2           |       4
+5 | 32    |    44   |     -12           |     144
 
 
+**$(x_i - \bar{x})^2$** = 4 + 100 + 4 + 4 + 144 = **`r sum(4,100,4,4,144)`**
 
-**$\Sigma x_i$** = 46 + 54 + 42 + 46 + 32 = `r sum(46,54,42,46,32)`
-
-## Step 2: Divide by the number of observations
+## Step 2: Divide by the number of observations minus 1.
 
 The number of observations is 5.\
 \
-**$n$** = 5\
+**$n-1$** = 4\
 \
 Now that we know the two components of the formula,
-$\bar{x} = \frac{\Sigma x_i}{n}$, we only need to divide them to arrive
+$s^2 = \frac{\Sigma (x_i - \bar{x})^2}{n-1}$, we only need to divide them to arrive
 at our answer.\
 \
-**$\bar{x}$**= 220/5 = `r mean(c(46,54,42,46,32))`\
+**$s^2$**= 256/4 = `r var(c(46,54,42,46,32))`\
 \
-The sample arithmetic mean (**$\bar{x}$**) in this example is `r mean(c(46,54,42,46,32))`.\
+The sample variance (**$s^2$**) in this example is 64.\
 
-# Median
+# Standard Deviation
 
 The **median** is another measure of location frequently used. The median is the
 middle value in a sorted data set. For an **odd number of observations**, the median
@@ -135,7 +148,7 @@ $_i$|$x_i$
 
 ## Step 2: Find the Middle Value
 
-The middle value (the 3rd value of 5) is 46. The median is `r median(c(46,54,42,46,32))`. 
+The middle value (the 3rd value of 5) is 46. The median is 46. 
 You will notice that the median equals the mean calculated
 in our previous example for these data.
 
@@ -143,8 +156,8 @@ in our previous example for these data.
 
 When calculating the median with an **even number of observations**, first sort
 the data. Given the following sorted data set, we find the two middle values
-and calculate their mean to find the median.\
-\
+and calculate their mean to find the median.
+
 **32, 42, 44, 46, 46, 54**\
 \
 (44 + 46)/2 = 45 is the median in this example.
