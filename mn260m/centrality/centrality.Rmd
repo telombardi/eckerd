@@ -1,0 +1,229 @@
+---
+title: "Measures of Location"
+runningheader: "Measures of Location" # only for pdf output
+subtitle: "Measuring Central Tendancy" # only for html output
+output:
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_html: default
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+bibliography: skeleton.bib
+link-citations: yes
+---
+
+```{r setup, include=FALSE}
+library(tufte)
+library('plyr')
+library(epiDisplay)
+# invalidate cache when the tufte version changes
+knitr::opts_chunk$set(cache.extra = packageVersion('tufte'))
+options(htmltools.dir.version = FALSE)
+```
+
+```{marginfigure}
+**Sample Statistic**: 
+A numerical value used as a summary measure for a sample such as the sample
+mean, $\bar{x}$. 
+```
+
+```{marginfigure}
+**Population Parameter**: 
+A numerical value used as a summary measure for a population such as the 
+population mean, $\mu$. 
+```
+
+In previous discussions, we introduced the difference between and population
+and a sample. This distinction matters as we start our discussion of 
+measures of location or measures of central tendency. Measures based 
+on samples are called **sample statistics**, Measures based on a population
+are called **population parameters**. 
+
+# Arithmetic Mean
+
+```{marginfigure}
+**Sample Mean**: 
+\Large
+\begin{equation} 
+    \bar{x} = \frac{\Sigma x_i}{n}
+\end{equation}
+where $\Sigma$ means the sum of, $x_i$ is the value of x for the ith observation
+and $n$ is the number of observations in the sample data set.
+```
+
+Measures of location attempt to capture the most typical values found in a 
+variable. The most important measure of location is the **arithmetic mean**, or 
+the average value, of a variable. The mean is computed by summing the data 
+values and dividing by the number of observations. 
+Let's walk through the components of the equation for the sample mean.\
+
+```{marginfigure}
+**Population Mean**: 
+\Large
+\begin{equation} 
+    \mu = \frac{\Sigma x_i}{N}
+\end{equation}
+where $\Sigma$ means the sum of, $x_i$ is the value of x for the ith observation
+and $N$ is the number of observations in the population data set.
+```
+
+\
+**$\bar{x}$**, pronounced *x bar*, is the symbol for the sample mean.\
+\
+**$\Sigma$** means sum the values. So $\Sigma x_i$ means sum the values 
+from $x_i$ to $x_n$. $i$ is referred to as an index.\
+\
+**$n$** is the size of the sample or the number of observations in the sample.\
+\
+Let's calculate the arithmetic mean for the following sample:\
+\
+**46, 54, 42, 46, 32**\
+\
+In this example, $x_1$=46, $x_2$=54, $x_3$=42, $x_4$=46, and $x_5$=32. For
+the sake of simplicity, we often lay out our calculations as follows.
+
+## Step 1: Calculate the sum of the values
+
+$_i$|$x_i$
+-|-----
+1| 46
+2| 54
+3| 42
+4| 46
+5| 32
+-|-----
+$\Sigma$|`r sum(46,54,42,46,32)`
+
+
+\
+**$\Sigma x_i$** = 46 + 54 + 42 + 46 + 32 = `r sum(46,54,42,46,32)`
+
+## Step 2: Divide by the number of observations
+
+The number of observations is 5.\
+\
+**$n$** = 5\
+\
+Now that we know the two components of the formula,
+$\bar{x} = \frac{\Sigma x_i}{n}$, we only need to divide them to arrive
+at our answer.\
+\
+**$\bar{x}$**= 220/5 = `r mean(46,54,42,46,32)`\
+\
+The sample arithmetic mean (**$\bar{x}$**) in this example is `r mean(46,54,42,46,32)`.\
+
+# Median
+
+The **median** is another measure of location frequently used. The median is the
+middle value in a sorted data set. For an **odd number of observations**, the median
+is the middle number. For example, given the sample data in our previous 
+example, the median is:
+
+## Step 1: Sort the Data
+
+**46, 54, 42, 46, 32** becomes ordered data set **32, 42, 46, 46, 54**
+
+$_i$|$x_i$
+-|-----
+1| 32
+2| 42
+3| 46
+4| 46
+5| 54
+
+## Step 2: Find the Middle Value
+
+The middle value (the 3rd value of 5) is 46. The median is 46. 
+You will notice that the median equals the mean calculated
+in our previous example for these data.
+
+## Calculating the Median with an Even Number of Observations
+
+When calculating the median with an **even number of observations**, first sort
+the data. Given the following sorted data set, we find the two middle values
+and calculate their mean to find the median.
+
+**32, 42, 44, 46, 46, 54**\
+\
+(44 + 46)/2 = 45 is the median in this example.
+
+# Comparing the Mean and the Median
+
+```{r, echo = FALSE, fig.margin=TRUE, fig.height=4, fig.cap="Normal Distribution"}
+ N <- 100000
+ x <- rnorm(n=N, mean=100, sd=10)
+ hist(x, 
+ xlim=c(min(x),max(x)), probability=T, nclass=max(x)-min(x)+1, 
+   col='lightblue', xlab=' ', ylab=' ', axes=F,
+   main='Symmetic Distribution')
+#lines(density(x,bw=1), col='red', lwd=3)
+abline(v = mean(x),                     # Add line for mean
+       col = "green",
+       lwd = 3)
+abline(v = median(x),                    # Add line for median
+       col = "red",
+       lwd = 3)
+```
+
+In distributions that are symmetric, we expect that the mean and median will 
+be extremely close if not equal. In the example shown in Figure 1, the mean
+and median are 100.03 and 100.04 respectively. The values are so close that 
+their lines overlap in Figure 1.
+
+```{marginfigure}
+**Outlier**:
+An unusually small or unusually large data value.
+```
+
+This is not always the case, however. Consider the example offered by Figure 2.
+We can see the mean and median pulling apart. In fact, the median (the red line)
+is closer to the typical value in this distribution. The mean is pulled toward
+the extreme values in this distribution because the mean as a measurement is 
+sensitive to **outliers**, unusual values in a distibution. The median, on the
+other hand, is relatively insensitive to outliers. Often the median is the 
+measure of central tendency reported with economic or business data because
+measurements related to money are often skewed like the data shown in Figure 2.
+
+```{r, echo = FALSE, fig.margin=TRUE, fig.height=4, fig.cap="Skewed Distribution"}
+ N <- 100000
+ #x <- rnbinom(N, 10, .3)
+ x<-  rexp(N,0.15)
+ hist(x, 
+ xlim=c(min(x),max(x)), probability=T, nclass=max(x)-min(x)+1, 
+   col='lightblue', xlab=' ', ylab=' ', axes=F,
+   main='Positive Skew')
+#lines(density(x,bw=1), col='red', lwd=3)
+abline(v = mean(x),                     # Add line for mean
+       col = "green",
+       lwd = 3)
+abline(v = median(x),                    # Add line for median
+       col = "red",
+       lwd = 3)
+```
+
+# Mode
+
+```{marginfigure}
+**Mode**:
+The value that occurs with the greatest frequency.
+```
+
+In our running problem, **46, 54, 42, 46, 32**, the mode is 46 as it is the
+only value that occurs twice in the data set.
+
+# Measures of Location and Scales of Measurement
+
+In our previous sessions, we introduced scales of measurement to help us
+understand when certain techniques are appropriate given the properties of our
+data. Scales of Measurement is particularly useful when thinking about 
+reasonable uses of measures of central tendency. Table 1 summarizes the 
+measures of location most appropriate for different scales of measurement.
+
+Scale of Measurement|Measure of Location
+--------------------|-------------------
+Nominal             | Mode
+Ordinal             | Median, Mode
+Interval            | Arithmetic Mean, Median, Mode
+Ratio               | Geometric Mean, Arithmetic Mean, Median, Mode
