@@ -61,6 +61,16 @@ A sample statistic, such $\bar{x}$, $s^2$, and $s$, used to estimate the
 corresponding population parameter.
 ```
 
+```{marginfigure}
+**Population Variance**: 
+\Large
+\begin{equation} 
+    \sigma^2 = \frac{\Sigma (x_i - \mu)^2}{N}
+\end{equation}
+where $\Sigma$ means the sum of, $x_i$ is the value of x for the ith observation,
+$\mu$ is the population mean, and $N$ is the number of observations in the population data set.
+```
+
 In order to understand these differences, we need to review the difference
 between samples and populations, and sample statistics and a population parameters.
 Often, we want to know the population parameter, but we cannot directly measure it
@@ -76,20 +86,10 @@ unbiased (better) estimation of the population variance. In short, the
 sample variance estimates the population variance and where the sample formula
 departs from its population equivalent, it does so to improve its estimation.
 
-```{marginfigure}
-**Population Variance**: 
-\Large
-\begin{equation} 
-    \sigma^2 = \frac{\Sigma (x_i - \mu)^2}{N}
-\end{equation}
-where $\Sigma$ means the sum of, $x_i$ is the value of x for the ith observation,
-$\mu$ is the population mean, and $N$ is the number of observations in the population data set.
-```
-
 Let's walk through the sample variance formula.\
 \
-**$s^2$** is the symbol for sample variance.
-
+**$s^2$** is the symbol for sample variance.\
+\
 **$\Sigma (x_i - \bar{x})^2$** represents the sum of squared deviations (sum of squares).\
 \
 **$n-1$** is the size of the sample less one.\
@@ -127,116 +127,95 @@ at our answer.\
 \
 The sample variance (**$s^2$**) in this example is 64.\
 
+The variance can be difficult to interpret because the units of the variance
+is squared. In other words, the units of our answer, 64, is $students^2$. This
+can make it hard to develop an intuitive sense of the measurement. In general,
+the larger the variance, the more variability in a variable. If you need
+more insight into variability, you will want to convert the variance into 
+a standard deviation.
+
+\newpage
+
 # Standard Deviation
 
-The **median** is another measure of location frequently used. The median is the
-middle value in a sorted data set. For an **odd number of observations**, the median
-is the middle number. For example, given the sample data in our previous 
-example, the median is:
+The **standard deviation** is the positive square root of the variance. 
+The standard deviation is much easier to interpret because it expresses
+the variability in the same units as the original data. Moreover, as we will
+see, we can use the mean and the standard deviation together to learn about 
+our data.
 
-## Step 1: Sort the Data
+```{marginfigure}
+**Sample Standard Deviation**: 
+\Large
+\begin{equation} 
+    s = \sqrt{s^2} 
+\end{equation}
+where $s^2$ is the sample variance.
+```
 
-**46, 54, 42, 46, 32** becomes ordered data set **32, 42, 46, 46, 54**
-
-$_i$|$x_i$
--|-----
-1| 32
-2| 42
-3| 46
-4| 46
-5| 54
-
-## Step 2: Find the Middle Value
-
-The middle value (the 3rd value of 5) is 46. The median is 46. 
-You will notice that the median equals the mean calculated
-in our previous example for these data.
-
-## Calculating the Median with an Even Number of Observations
-
-When calculating the median with an **even number of observations**, first sort
-the data. Given the following sorted data set, we find the two middle values
-and calculate their mean to find the median.
-
-**32, 42, 44, 46, 46, 54**\
+If we want to convert the variance, 64, to a standard deviation, we 
+perform the following calculation.\
 \
-(44 + 46)/2 = 45 is the median in this example.
-
-# Comparing the Mean and the Median
-
-```{r, echo = FALSE, fig.margin=TRUE, fig.height=4, fig.cap="Normal Distribution"}
- N <- 100000
- x <- rnorm(n=N, mean=100, sd=10)
- hist(x, 
- xlim=c(min(x),max(x)), probability=T, nclass=max(x)-min(x)+1, 
-   col='lightblue', xlab=' ', ylab=' ', axes=F,
-   main='Symmetic Distribution')
-#lines(density(x,bw=1), col='red', lwd=3)
-abline(v = mean(x),                     # Add line for mean
-       col = "green",
-       lwd = 3)
-abline(v = median(x),                    # Add line for median
-       col = "red",
-       lwd = 3)
-```
-
-In distributions that are symmetric, we expect that the mean and median will 
-be extremely close if not equal. In the example shown in Figure 1, the mean
-and median are 100.03 and 100.04 respectively. The values are so close that 
-their lines overlap in Figure 1.
+$s = \sqrt{64}$ = `r sqrt(64)`
 
 ```{marginfigure}
-**Outlier**:
-An unusually small or unusually large data value.
+**Population Standard Deviation**: 
+\Large
+\begin{equation} 
+    \sigma = \sqrt{\sigma^2} 
+\end{equation}
+where $\sigma^2$ is the population variance.
 ```
 
-This is not always the case, however. Consider the example offered by Figure 2.
-We can see the mean and median pulling apart. In fact, the median (the red line)
-is closer to the typical value in this distribution. The mean is pulled toward
-the extreme values in this distribution because the mean as a measurement is 
-sensitive to **outliers**, unusual values in a distibution. The median, on the
-other hand, is relatively insensitive to outliers. Often the median is the 
-measure of central tendency reported with economic or business data because
-measurements related to money are often skewed like the data shown in Figure 2.
+# Range
 
-```{r, echo = FALSE, fig.margin=TRUE, fig.height=4, fig.cap="Skewed Distribution"}
- N <- 100000
- #x <- rnbinom(N, 10, .3)
- x<-  rexp(N,0.15)
- hist(x, 
- xlim=c(min(x),max(x)), probability=T, nclass=max(x)-min(x)+1, 
-   col='lightblue', xlab=' ', ylab=' ', axes=F,
-   main='Positive Skew')
-#lines(density(x,bw=1), col='red', lwd=3)
-abline(v = mean(x),                     # Add line for mean
-       col = "green",
-       lwd = 3)
-abline(v = median(x),                    # Add line for median
-       col = "red",
-       lwd = 3)
-```
-
-# Mode
+The simplest measure of variability is **range**. \
+\
+**46, 54, 42, 46, 32**\
+\
+The range of the set of number above is:\
+\
+$range = 54 - 32$ = `r 54-32`
 
 ```{marginfigure}
-**Mode**:
-The value that occurs with the greatest frequency.
+**Range**:
+\Large
+\begin{equation} 
+   range = max - min
+\end{equation}
+where max is the largest value in the data set and min is the smallest
+value.
 ```
 
-In our running problem, **46, 54, 42, 46, 32**, the mode is 46 as it is the
-only value that occurs twice in the data set.
+The range is seldom used by itself because it is extremely sensitive to 
+outliers.
 
-# Measures of Location and Scales of Measurement
+# Interquartile Range (IQR)
 
-In our previous sessions, we introduced scales of measurement to help us
-understand when certain techniques are appropriate given the properties of our
-data. Scales of Measurement is particularly useful when thinking about 
-reasonable uses of measures of central tendency. Table 1 summarizes the 
-measures of location most appropriate for different scales of measurement.
+The **interquartile range (IQR)** is a measure of variability not sensitive to 
+extreme values. Quartiles divide the data into four parts based on three
+points: Q1, Q2, and Q3.\
+\
+$Q1$ = first quartile or 25th percentile\
+$Q2$ = second quartile or 50th percentile or median\
+$Q3$ = third quartile or 75th percentile\
 
-Scale of Measurement|Measure of Location
---------------------|-------------------
-Nominal             | Mode
-Ordinal             | Median, Mode
-Interval            | Arithmetic Mean, Median, Mode
-Ratio               | Geometric Mean, Arithmetic Mean, Median, Mode
+```{marginfigure}
+**Interquartile Range (IQR)**:
+\Large
+\begin{equation} 
+   IQR = Q_3 - Q_1
+\end{equation}
+where $Q_3$ is the third quartile and $Q_1$ is the first quartile.
+```
+\
+To calculate the IQR or our sample data, we sort it first.\
+\
+**46, 54, 42, 46, 32** -->  **32, 42, 46, 46, 54**\
+\
+We find Q1 and Q3 using the technique for finding percentiles. In this 
+example, Q1 is 37 and Q3 is 50. We subtract Q1 from Q3 to find the IQR.\
+\
+$IQR = 50 - 37 = 13$
+
+
