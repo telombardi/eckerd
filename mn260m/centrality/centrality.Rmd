@@ -213,6 +213,46 @@ The value that occurs with the greatest frequency.
 In our running problem, **46, 54, 42, 46, 32**, the mode is 46 as it is the
 only value that occurs twice in the data set.
 
+# Percentiles
+
+A **percentile** provides information about how the data are spread over the 
+interval from the smallest to the largest value. A percentile divides the 
+data into two parts: the data less than the percentile and the data greater
+than the percentile. For example, the 25th percentile divides the
+data such that 25% of the data are less than the 25th percentile and 75% of the 
+data are greater than the 25th percentile.
+
+```{marginfigure}
+**Location of the Pth Percentile**: 
+\Large
+\begin{equation} 
+    L{p} = \frac{p}{100} (n+1)
+\end{equation}
+where $p$ is the percentile and $n$ is the number of observations.
+```
+
+To calculate the 25th percentile, we begin by ordering our data: \
+\
+**46, 54, 42, 46, 32** --> **32, 42, 46, 46, 54**\
+\
+After sorting the data, we use formula 3 to calculate the position or rank
+of the 25th percentile, $L_{25}$. In this case, we substitute 25 for $p$ and 5 for $n$.\
+\
+$L_{25} = \frac{25}{100} (5+1) = 1.5$\
+\
+So we now have the rank or position of the 25th percentile, $L_{25}$. 
+We need to convert this to an actual value. 
+The rank number 1.5 tells us the following:\
+\
+1. **1**.5 tells us that the 25th percentile is after position 1 (value 32).\
+2. 1**.5** tells us that the 25th percentile is .5 (half) of the way between positions 1 and 2.\
+\
+To convert this information to a value, we perform the following calculation:\
+\
+25th percentile = 32 + (42-32)\*0.5 = `r 32 + (42-32)*0.5`
+\
+
+
 # Measures of Location and Scales of Measurement
 
 In our previous sessions, we introduced scales of measurement to help us
