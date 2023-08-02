@@ -1,0 +1,221 @@
+---
+title: "Book"
+runningheader: "Measures of Variability" # only for pdf output
+subtitle: "Measuring Dispersion" # only for html output
+output:
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_html: default
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+bibliography: skeleton.bib
+link-citations: yes
+---
+
+```{r setup, include=FALSE}
+library(tufte)
+library('plyr')
+library(epiDisplay)
+# invalidate cache when the tufte version changes
+knitr::opts_chunk$set(cache.extra = packageVersion('tufte'))
+options(htmltools.dir.version = FALSE)
+```
+
+In previous discussions, we introduced the concept of measures of location. They
+help us understand the typical values in a distribution. While measures of 
+location are certainly helpful, they are even more so when paired with a 
+measure of variability.
+
+# Variance
+
+```{marginfigure}
+**Sample Variance**: 
+\Large
+\begin{equation} 
+    s^2 = \frac{\Sigma (x_i - \bar{x})^2}{n-1}
+\end{equation}
+where $\Sigma$ means the sum of, $x_i$ is the value of x for the ith observation,
+$\bar{x}$ is the sample mean, and $n$ is the number of observations in the sample data set.
+```
+
+The variance is based on the difference between the value of each observation
+$x_i$ and the mean. The difference between each $x_i$ and the mean is called
+a **deviation about the mean**. These deviations about the mean are squared 
+in the calculation of the variance. The term $\Sigma (x_i - \bar{x})^2$  is 
+often referred to as the **sum of squares** or **sum of squared deviations**.
+Before walking through an example, let's
+compare the equations for sample variance and population variance. \
+
+There are three major differences between these two equations:
+1. $s^2$ denotes the sample variance; $\sigma^2$ denotes the population variance.
+2. The sample variance relies on the sample mean ($\bar{x}$), while the 
+population variance uses the population mean ($\mu$).
+3. The sample variance divides the sum of squared deviations by n-1, while the the
+population variance divides the sum of squares by n. 
+
+```{marginfigure}
+**Point Estimator**:
+A sample statistic, such $\bar{x}$, $s^2$, and $s$, used to estimate the 
+corresponding population parameter.
+```
+
+```{marginfigure}
+**Population Variance**: 
+\Large
+\begin{equation} 
+    \sigma^2 = \frac{\Sigma (x_i - \mu)^2}{N}
+\end{equation}
+where $\Sigma$ means the sum of, $x_i$ is the value of x for the ith observation,
+$\mu$ is the population mean, and $N$ is the number of observations in the population data set.
+```
+
+In order to understand these differences, we need to review the difference
+between samples and populations, and sample statistics and a population parameters.
+Often, we want to know the population parameter, but we cannot directly measure it
+due to cost, ethical or practical considerations. Statistical inference gives us
+a way to infer population parameters from the statistics of well-chosen samples.
+**Point estimation** is the process of using a sample statistic like the 
+sample mean ($\bar{x}$), sample variance ($s^2$), or sample standard deviation
+($s$) to estimate the corresponding population parameter. For example, we use
+the sample mean, $\bar{x}$, in the sample variance formula because we very 
+likely do not know or cannot know the population mean, $\mu$. Also, we divide
+the sum of squared deviations by n-1, rather than N, because this produces an
+unbiased (better) estimation of the population variance. In short, the 
+sample variance estimates the population variance and where the sample formula
+departs from its population equivalent, it does so to improve its estimation.
+
+Let's walk through the sample variance formula.\
+\
+**$s^2$** is the symbol for sample variance.\
+\
+**$\Sigma (x_i - \bar{x})^2$** represents the sum of squared deviations (sum of squares).\
+\
+**$n-1$** is the size of the sample less one.\
+\
+Let's calculate the arithmetic mean for the following sample.\
+\
+**46, 54, 42, 46, 32**\
+
+## Step 1: Calculate the sum of squared deviations
+
+Recall that the sample mean ($\bar{x}$) of these data is 44. 
+
+$_i$|$x_i$|$\bar{x}$|$(x_i - \bar{x})$  |$(x_i - \bar{x})^2$
+--|-------|---------|-------------------|---------------------
+1 | 46    |    44   |       2           |       4
+2 | 54    |    44   |      10           |     100
+3 | 42    |    44   |      -2           |       4
+4 | 46    |    44   |       2           |       4
+5 | 32    |    44   |     -12           |     144
+
+
+**$(x_i - \bar{x})^2$** = 4 + 100 + 4 + 4 + 144 = **`r sum(4,100,4,4,144)`**
+
+## Step 2: Divide by the number of observations minus 1.
+
+The number of observations is 5.\
+\
+**$n-1$** = 4\
+\
+Now that we know the two components of the formula,
+$s^2 = \frac{\Sigma (x_i - \bar{x})^2}{n-1}$, we only need to divide them to arrive
+at our answer.\
+\
+**$s^2$**= 256/4 = `r var(c(46,54,42,46,32))`\
+\
+The sample variance (**$s^2$**) in this example is 64.\
+
+The variance can be difficult to interpret because the units of the variance
+is squared. In other words, the units of our answer, 64, is $students^2$. This
+can make it hard to develop an intuitive sense of the measurement. In general,
+the larger the variance, the more variability in a variable. If you need
+more insight into variability, you will want to convert the variance into 
+a standard deviation.
+
+\newpage
+
+# Standard Deviation
+
+The **standard deviation** is the positive square root of the variance. 
+The standard deviation is much easier to interpret because it expresses
+the variability in the same units as the original data. Moreover, as we will
+see, we can use the mean and the standard deviation together to learn about 
+our data.
+
+```{marginfigure}
+**Sample Standard Deviation**: 
+\Large
+\begin{equation} 
+    s = \sqrt{s^2} 
+\end{equation}
+where $s^2$ is the sample variance.
+```
+
+If we want to convert the variance, 64, to a standard deviation, we 
+perform the following calculation.\
+\
+$s = \sqrt{64}$ = `r sqrt(64)`
+
+```{marginfigure}
+**Population Standard Deviation**: 
+\Large
+\begin{equation} 
+    \sigma = \sqrt{\sigma^2} 
+\end{equation}
+where $\sigma^2$ is the population variance.
+```
+
+# Range
+
+The simplest measure of variability is **range**. \
+\
+**46, 54, 42, 46, 32**\
+\
+The range of the set of number above is:\
+\
+$range = 54 - 32$ = `r 54-32`
+
+```{marginfigure}
+**Range**:
+\Large
+\begin{equation} 
+   range = max - min
+\end{equation}
+where max is the largest value in the data set and min is the smallest
+value.
+```
+
+The range is seldom used by itself because it is extremely sensitive to 
+outliers.
+
+# Interquartile Range (IQR)
+
+The **interquartile range (IQR)** is a measure of variability not sensitive to 
+extreme values. Quartiles divide the data into four parts based on three
+points: Q1, Q2, and Q3.\
+\
+$Q1$ = first quartile or 25th percentile\
+$Q2$ = second quartile or 50th percentile or median\
+$Q3$ = third quartile or 75th percentile\
+
+```{marginfigure}
+**Interquartile Range (IQR)**:
+\Large
+\begin{equation} 
+   IQR = Q_3 - Q_1
+\end{equation}
+where $Q_3$ is the third quartile and $Q_1$ is the first quartile.
+```
+\
+To calculate the IQR or our sample data, we sort it first.\
+\
+**46, 54, 42, 46, 32** -->  **32, 42, 46, 46, 54**\
+\
+We find Q1 and Q3 using the technique for finding percentiles. In this 
+example, Q1 is 37 and Q3 is 50. We subtract Q1 from Q3 to find the IQR.\
+\
+$IQR = 50 - 37 = 13$
+
+

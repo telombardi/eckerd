@@ -1,0 +1,109 @@
+---
+title: "Linear Programming"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE, error=FALSE, echo=FALSE}
+# Import lpSolve package
+library(lpSolve)
+```
+
+```{r}
+f.obj <- c(90,110)
+f.con <- matrix(c(2,4,1,2.5,2,1.5), nrow=3, byrow=TRUE)
+f.dir <- c("<=","<=","<=")
+f.rhs <- c(7000,4000,5500)
+my_lp <- lp("max",f.obj,f.con,f.dir,f.rhs)
+my_lp$solution
+print(my_lp)
+
+#obj.fun=function(x) t1 * 90 + t2 * 110
+
+x.vert = c(0, 0, 600, 1600)
+y.vert = c(0, 2750, 2300, 0)
+
+plot(1,xlim=c(0,4000),ylim=c(0,5000),xlab="t1",ylab="t2",lty=2,lwd=1.5,
+   main="feasible set for linear optimization problem")
+lines(c(0,1750),c(3500,0),lwd=2,col="blue")
+lines(c(0,1600),c(4000,0),lwd=2,col="blue")
+lines(c(0,3666),c(2750,0),lwd=2,col="blue")
+polygon(x.vert,y.vert,col=rgb(1,0,0,0.5))
+text(2000,2800,"optimal point (2300,600)")
+text(500,1000,"feasible set")
+
+```
+
+
+```{r}
+#Objective function
+#obj.fun=function(x) -x[1] - x[2]
+
+# setting up vertices for shading with polygon
+x.vert=c(0,1.5,1,0)
+y.vert = c(0,0,1,1.5)
+
+plot(1,xlim=c(0,3),ylim=c(0,3),xlab="x1",ylab="x2",lty=2,lwd=1.5,
+   main="feasible set for linear optimization problem")
+lines(c(0,3),c(1.5,0),lwd=2,col="blue")
+lines(c(0,1.5),c(3,0),lwd=2,col="blue")
+polygon(x.vert,y.vert,col=rgb(1,0,0,0.5))
+abline(0,-1,lty=4)
+abline(1,-1,lty=4)
+abline(2,-1,lty=4)
+points(1,1,pch=19)
+text(1.45,1,"optimal point (1,1)")
+text(0.5,0.5,"feasible set")
+```
+
+
+```{r}
+# Set coefficients of the objective function
+f.obj <- c(5, 7)
+ 
+# Set matrix corresponding to coefficients of constraints by rows
+# Do not consider the non-negative constraint; it is automatically assumed
+f.con <- matrix(c(1, 0,
+                  2, 3,
+                  1, 1), nrow = 3, byrow = TRUE)
+
+# Set unequality signs
+f.dir <- c("<=",
+           "<=",
+           "<=")
+
+# Set right hand side coefficients
+f.rhs <- c(16,
+           19,
+           8)
+
+# Final value (z)
+lp("max", f.obj, f.con, f.dir, f.rhs)
+
+# Variables final values
+lp("max", f.obj, f.con, f.dir, f.rhs)$solution
+
+# Sensitivities
+lp("max", f.obj, f.con, f.dir, f.rhs, compute.sens=TRUE)$sens.coef.from
+lp("max", f.obj, f.con, f.dir, f.rhs, compute.sens=TRUE)$sens.coef.to
+
+# Dual Values (first dual of the constraints and then dual of the variables)
+# Duals of the constraints and variables are mixed
+lp("max", f.obj, f.con, f.dir, f.rhs, compute.sens=TRUE)$duals
+
+# Duals lower and upper limits
+lp("max", f.obj, f.con, f.dir, f.rhs, compute.sens=TRUE)$duals.from
+lp("max", f.obj, f.con, f.dir, f.rhs, compute.sens=TRUE)$duals.to
+```
+
+# References
+
+https://towardsdatascience.com/linear-programming-in-r-444e9c199280
+
+https://www.danliden.com/post/visualizing-linear-programming-problems/
+
+
+
