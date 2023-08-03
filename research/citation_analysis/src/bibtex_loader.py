@@ -8,8 +8,20 @@ class BibtexLoader:
 	def iterate(self):
 		for entry in self.bib_data.entries.values():
 			beh = BEH(entry)
-			print(beh)
-			exit()
+			#print(entry)
+			print(beh.getFieldValue('Funding-Text'))
+			print(beh.getFieldValue('Funding-Acknowledgement'))
+			#print(beh)
+			#print(beh.persons)
+			#print(beh.getPersonValue('Author'))
+			#print(beh.getFieldValue('Author-Email'))
+			#print(beh.getFieldValue('Affiliation'))
+			#print(beh.getFieldValue('Affiliations'))
+			#print(beh.getFieldValue('ORCID-Numbers'))
+			#print(beh.getFieldValue('Type'))
+	
+
+			
 
 if __name__ == "__main__":
 	bl = BibtexLoader('C:/Users/lombardite/Documents/research/repo/savedrecs.bib')
