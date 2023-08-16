@@ -11,6 +11,12 @@ class SystemParm(Base):
 
 	key: Mapped[str] = mapped_column(String(50), primary_key=True)
 	value: Mapped[str] = mapped_column(String(50))
+	
+	def __repr__(self) -> str:
+		return f'key={self.key} : value={self.value}'
+	
+	def __str__(self) -> str:
+		return f'key={self.key} : value={self.value}'
 
 class PublicationType(Base):
 	__tablename__ = 'PUBLICATION_TYPE'
@@ -146,13 +152,16 @@ if __name__ == '__main__':
 
 
 
-		#stmt = select(SystemParm).where(SystemParm.key=='version')
+		stmt = select(SystemParm).where(SystemParm.key=='version')
 		#print(type(stmt))
 		#print(stmt)
 
-		#row = session.execute(select(SystemParm).where(SystemParm.key=='version')).first()
+		row = session.execute(select(SystemParm).where(SystemParm.key=='version')).first()
 		#print(row)
-		#print(f'{row.SystemParm.key} : {row.SystemParm.value}')
+		print(f'{row.SystemParm.key} : {row.SystemParm.value}')
+		
+		sp = SystemParm(key=row.SystemParm.key,value=row.SystemParm.value)
+		print(sp)
 
 
 

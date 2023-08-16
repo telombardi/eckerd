@@ -1,5 +1,5 @@
 from pybtex.database import parse_file
-from bibtex_entry_handler import BibtexEntryHandler as BEH
+from bibtex_entry_handler import BibtexEntryHandler
 
 class BibtexLoader:
 	def __init__(self, bib_file_str: str):
@@ -7,7 +7,7 @@ class BibtexLoader:
 
 	def iterate(self):
 		for entry in self.bib_data.entries.values():
-			beh = BEH(entry)
+			beh = BibtexEntryHandler(entry)
 			#print(entry)
 			print(beh.getFieldValue('Funding-Text'))
 			print(beh.getFieldValue('Funding-Acknowledgement'))
